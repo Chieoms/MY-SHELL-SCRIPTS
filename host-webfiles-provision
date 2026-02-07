@@ -1,0 +1,52 @@
+#!/bin/bash
+
+
+set -euo pipefail
+
+# Load OS info
+. /etc/os-release
+SRV=nginx
+
+if [[ $ID == "ubuntu" || $ID == "debian" ]]; then
+    WEBROOT=/var/www/html
+    SRVFILE=/var/www/html/index.nginx-debian.html
+    sudo apt update
+    # sudo apt upgrade -y
+    sudo apt install -y $SRV git
+
+    # Enable and start service
+    sudo systemctl enable --now $SRV
+
+
+    # Clean default files
+    sudo rm -f "$SRVFILE"
+
+else
+    WEBROOT=/usr/share/nginx/html
+
+    # Install packages
+    if command -v dnf &> /dev/null; then
+        sudo dnf install -y $SRV git
+    else
+        sudo yum install -y $SRV git
+    fi
+
+    # Enable and start service
+    sudo systemctl enable --now $SRV
+
+    # Clean web root
+    sudo rm -rf "$WEBROOT"/*
+fi
+
+# Clone repo
+git clone -b main https://github.com/Chieoms/LIVING_PARALLEX.git /tmp/webfiles
+
+
+# Copy website
+sudo cp -r /tmp/webfiles/* "$WEBROOT"
+
+# Restart Service
+sudo systemctl restart $SRV
+
+# Clean clone
+sudo rm -rf /tmp/webfiles
