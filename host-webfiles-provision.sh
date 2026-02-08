@@ -1,6 +1,5 @@
 #!/bin/bash
 
-
 set -euo pipefail
 
 # Load OS info
