@@ -38,7 +38,7 @@ else
 fi
 
 # Clone repo
-git clone -b main https://github.com/Chieoms/LIVING_PARALLEX.git /tmp/webfiles
+git clone -b main https://github.com/chieoms/LIVING_PARALLEX.git /tmp/webfiles
 
 
 # Copy website
